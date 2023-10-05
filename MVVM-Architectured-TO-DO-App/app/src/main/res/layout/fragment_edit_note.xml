@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Fragments.EditNoteFragment"
+    android:id="@+id/editnoteContainer"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/titleedittext"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/edittextbackground"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:hint="Title"
+            android:padding="10dp"/>
+
+        <EditText
+            android:id="@+id/subtitleedittext"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/edittextbackground"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:hint="Subtitile"
+            android:padding="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/reddot"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/red"
+                android:layout_margin="15dp"
+                />
+
+            <ImageView
+                android:id="@+id/greendot"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/green"
+                android:layout_margin="15dp"
+                />
+
+            <ImageView
+                android:id="@+id/bluedot"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/blue"
+                android:layout_margin="15dp"
+                />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/descriptionedittext"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/edittextbackground"
+            android:hint="Description"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingbbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="36dp"
+        android:src="@drawable/ic_save"
+        android:backgroundTint="@color/red"
+        />
+
+
+</FrameLayout>
