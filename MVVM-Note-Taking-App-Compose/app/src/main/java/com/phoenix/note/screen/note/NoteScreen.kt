@@ -54,6 +54,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.launch
 
+/**
+ * @Destination annotation is used to define nav graph routes with ComposeDestinations
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
@@ -68,11 +71,18 @@ fun NoteScreen(
     val uiState by noteViewModel.uiState.collectAsStateWithLifecycle()
     val note by noteViewModel.note.collectAsStateWithLifecycle()
 
+    /**
+     * Pass Note model to ViewModel to check if its empty or not
+     * If not set title and message based on given Note
+     */
     LaunchedEffect(Unit) {
         noteViewModel.assignNavigator(navigator)
         noteViewModel.assignNote(editableNote)
     }
 
+    /**
+     * Display unsaved change dialog when user accidentally press back button
+     */
     BackHandler(uiState.title.isNotEmpty() || uiState.note.isNotEmpty()) {
         noteViewModel.onEvent(NoteUiEvent.OpenDialogue(DialogState.UnsavedChanges))
     }
@@ -100,6 +110,10 @@ fun NoteScreen(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
                                 .clickable {
+                                    /**
+                                     * Request ViewModel to change dialog state
+                                     * And open delete dialog
+                                     */
                                     noteViewModel.onEvent(
                                         NoteUiEvent.OpenDialogue(
                                             DialogState.Delete(note!!.id)
@@ -163,6 +177,9 @@ fun NoteScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 },
+                /**
+                 * Remove text field background and Indicator so it would be more beautiful
+                 */
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
@@ -187,6 +204,9 @@ fun NoteScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 },
+                /**
+                 * Remove text field background and Indicator so it would be more beautiful
+                 */
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
@@ -197,6 +217,9 @@ fun NoteScreen(
         }
     }
 
+    /**
+     * Check dialog state and select a @Composable suitable for dialog state
+     */
     if (uiState.dialogState != DialogState.None) {
         when (uiState.dialogState) {
             DialogState.None -> {}

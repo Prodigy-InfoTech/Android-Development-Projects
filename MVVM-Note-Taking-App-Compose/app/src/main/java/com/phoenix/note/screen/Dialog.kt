@@ -15,6 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.phoenix.note.R
 
+/**
+ * I changed confirm button and dismiss button so negative CTA (like delete or discard)
+ * wont trigger by mistake
+ */
 object Dialog {
 
     @Composable

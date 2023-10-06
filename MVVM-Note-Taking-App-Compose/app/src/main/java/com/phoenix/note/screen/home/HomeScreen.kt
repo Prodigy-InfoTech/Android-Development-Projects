@@ -40,6 +40,12 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 
+/**
+ * This composable annotated with @RootNavGraph(start = true) so it will be start route of
+ * root nav graph
+ *
+ * @Destination annotation is used to define nav graph routes with ComposeDestinations
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
 @Destination
@@ -51,7 +57,10 @@ fun HomeScreen(
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val notes by homeViewModel.notes.collectAsStateWithLifecycle()
-
+    /**
+     * Receive a boolean from NoteScreen to check if any changes made in database
+     * If true then refresh notes taken from database
+     */
     noteResultRecipient.onNavResult {
         when (it) {
             NavResult.Canceled -> {}
@@ -86,6 +95,9 @@ fun HomeScreen(
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
+        /**
+         * Used a cross fade to animate between loading and actual list
+         */
         Crossfade(targetState = uiState.displayLoading, label = "") { isLoading ->
             Box(
                 Modifier
@@ -104,7 +116,7 @@ fun HomeScreen(
                         StaggeredGridCells.Adaptive(150.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        items(notes) { note ->
+                        items(notes.reversed()) { note ->
                             HomeNote(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -115,7 +127,6 @@ fun HomeScreen(
                                 },
                                 onClickDelete = {
                                     homeViewModel.onEvent(HomeUiEvent.OpenDeleteDialog(it))
-                                    homeViewModel.onEvent(HomeUiEvent.Refresh)
                                 }
                             )
                         }
@@ -125,6 +136,9 @@ fun HomeScreen(
         }
     }
 
+    /**
+     * Check if delete dialog is requested for any note
+     */
     if (uiState.dialogState is DialogState.Delete) {
         val note = notes.first { it.id == (uiState.dialogState as DialogState.Delete).noteId }
         Dialog.DeleteDialog(

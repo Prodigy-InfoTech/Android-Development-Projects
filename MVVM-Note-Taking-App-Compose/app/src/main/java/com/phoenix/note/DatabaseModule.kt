@@ -10,6 +10,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Provide database related classes so we can @Inject it in ViewModel
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {

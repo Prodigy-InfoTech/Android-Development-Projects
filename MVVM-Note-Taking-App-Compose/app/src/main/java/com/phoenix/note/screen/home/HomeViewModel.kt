@@ -19,6 +19,10 @@ class HomeViewModel @Inject constructor(
     val noteDao: NoteDao
 ): ViewModel() {
 
+    /**
+     * Make a private mutable variable to make changes in ViewModel
+     * Make a immutable version for public use
+     */
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
@@ -47,6 +51,10 @@ class HomeViewModel @Inject constructor(
             HomeUiEvent.OnClickFAB ->
                 navigator.navigate(NoteScreenDestination(null))
 
+            /**
+             * Pass a note as parameter to NoteScreen when clicked on a note
+             * So NoteScreen get initiated with a note instead of being empty
+             */
             is HomeUiEvent.OnClickNote -> {
                 val note = notes.value.first { it.id == event.noteId }
                 navigator.navigate(NoteScreenDestination(note))

@@ -35,6 +35,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    /**
+                     * Use ComposeDestination library to implement navigation
+                     * Use default root nav graph
+                     * You can navigate to any composable annotated with @Destination
+                     * HomeScree.kt is start route of root nav graph
+                     */
                     DestinationsNavHost(navGraph = NavGraphs.root)
                 }
             }

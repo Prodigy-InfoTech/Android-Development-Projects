@@ -29,6 +29,10 @@ class NoteViewModel @Inject constructor(
         this.navigator = navigator
     }
 
+    /**
+     * Check if passed Note is not null
+     * Then set title and message based on it
+     */
     fun assignNote(note: Note?) {
         _note.update { note }
         _note.value?.let {
@@ -49,6 +53,10 @@ class NoteViewModel @Inject constructor(
             is NoteUiEvent.OnNoteChange ->
                 _uiState.update { it.copy(note = event.note) }
 
+            /**
+             * Store (or update) a Note model inside database and return true
+             * HomeScreen.kt check this result and refresh if its true
+             */
             NoteUiEvent.SaveNote ->
                 viewModelScope.launch {
                     saveNote()
