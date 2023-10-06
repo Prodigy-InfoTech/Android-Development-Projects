@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">NoteTakingApp</string>
+    <string name="note_empty_message">Looks like we have no notes right now :)</string>
+    <string name="new_note">New note</string>
+    <string name="delete_note">Delete note</string>
+    <string name="delete_message">Are you sure you wanna delete this note</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>
