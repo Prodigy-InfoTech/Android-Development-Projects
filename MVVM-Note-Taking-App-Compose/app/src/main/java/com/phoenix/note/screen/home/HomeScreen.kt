@@ -1,9 +1,7 @@
 package com.phoenix.note.screen.home
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,22 +11,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,21 +30,40 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.phoenix.note.R
+import com.phoenix.note.screen.Dialog
+import com.phoenix.note.screen.DialogState
+import com.phoenix.note.screen.destinations.NoteScreenDestination
 import com.phoenix.note.screen.home.widget.HomeNote
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 
 @OptIn(ExperimentalMaterial3Api::class)
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    noteResultRecipient: ResultRecipient<NoteScreenDestination, Boolean>,
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val notes by homeViewModel.notes.collectAsStateWithLifecycle()
 
-    homeViewModel.assignNavigator(navigator)
+    noteResultRecipient.onNavResult {
+        when (it) {
+            NavResult.Canceled -> {}
+            is NavResult.Value -> {
+                if (it.value) homeViewModel.onEvent(HomeUiEvent.Refresh)
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        homeViewModel.assignNavigator(navigator)
+    }
 
     Scaffold(
         topBar = {
@@ -59,7 +71,10 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { homeViewModel.onEvent(HomeUiEvent.OnClickFAB) }) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.new_note)
@@ -71,33 +86,36 @@ fun HomeScreen(
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center,
-        ) {
-            Crossfade(targetState = uiState.displayLoading, label = "") { isLoading ->
-                if (isLoading) {
+        Crossfade(targetState = uiState.displayLoading, label = "") { isLoading ->
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (isLoading)
                     CircularProgressIndicator()
-                } else {
+                else {
+                    if (notes.isEmpty())
+                        Text(text = stringResource(R.string.note_empty_message))
+
                     LazyVerticalStaggeredGrid(
-                        StaggeredGridCells.Adaptive(120.dp),
-                        contentPadding = PaddingValues(16.dp),
+                        StaggeredGridCells.Adaptive(150.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        if (notes.isEmpty())
-                            item {
-                                Box(Modifier.fillMaxSize()) {
-                                    Text(text = stringResource(R.string.note_empty_message))
-                                }
-                            }
                         items(notes) { note ->
                             HomeNote(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp, vertical = 8.dp),
                                 note,
                                 onClick = {
                                     homeViewModel.onEvent(HomeUiEvent.OnClickNote(note.id))
+                                },
+                                onClickDelete = {
+                                    homeViewModel.onEvent(HomeUiEvent.OpenDeleteDialog(it))
+                                    homeViewModel.onEvent(HomeUiEvent.Refresh)
                                 }
                             )
                         }
@@ -107,39 +125,15 @@ fun HomeScreen(
         }
     }
 
-    if(uiState.dialogState != DialogState.None) {
+    if (uiState.dialogState is DialogState.Delete) {
         val note = notes.first { it.id == (uiState.dialogState as DialogState.Delete).noteId }
-        AlertDialog(
-            onDismissRequest = { homeViewModel.onEvent(HomeUiEvent.DismissDialogue) },
-            title = {
-                Text(text = note.title)
-                    },
-            text = { Text(text = stringResource(R.string.delete_message)) },
-            confirmButton = {
-                Button(
-                    onClick = { homeViewModel.onEvent(HomeUiEvent.DismissDialogue) },
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
+        Dialog.DeleteDialog(
+            onDismiss = { homeViewModel.onEvent(HomeUiEvent.DismissDialogue) },
+            onDelete = {
+                homeViewModel.onEvent(HomeUiEvent.DeleteNote(note))
+                homeViewModel.onEvent(HomeUiEvent.Refresh)
             },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = { homeViewModel.onEvent(HomeUiEvent.DeleteNote(note)) },
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                    border = BorderStroke(
-                        ButtonDefaults.outlinedButtonBorder.width,
-                        MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text(
-                        stringResource(R.string.delete),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
+            title = note.title
         )
     }
 }

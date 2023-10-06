@@ -29,7 +29,8 @@ import com.phoenix.note.data.model.Note
 fun HomeNote(
     modifier: Modifier,
     note: Note,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onClickDelete: (Int) -> Unit,
 ) {
     Column(
         modifier
@@ -54,7 +55,11 @@ fun HomeNote(
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete",
-                tint = MaterialTheme.colorScheme.error
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { onClickDelete(note.id) }
+                    .padding(4.dp)
             )
         }
         Spacer(Modifier.height(8.dp))

@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.note.data.dao.NoteDao
 import com.phoenix.note.data.model.Note
+import com.phoenix.note.screen.DialogState
+import com.phoenix.note.screen.destinations.NoteScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,24 +27,30 @@ class HomeViewModel @Inject constructor(
     private lateinit var navigator: DestinationsNavigator
 
     init {
-        viewModelScope.launch {
-            noteDao.getAllNotes().collect {
-                _uiState.update { it.copy(displayLoading = true) }
-                _notes.update { it }
-                _uiState.update { it.copy(displayLoading = false) }
-            }
-        }
+        refresh()
     }
 
     fun assignNavigator(navigator: DestinationsNavigator) {
         this.navigator = navigator
     }
 
+    private fun refresh() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(displayLoading = true) }
+            _notes.update { noteDao.getAllNotes() }
+            _uiState.update { it.copy(displayLoading = false) }
+        }
+    }
+
     fun onEvent(event: HomeUiEvent) {
         when(event) {
-            HomeUiEvent.OnClickFAB -> {}
+            HomeUiEvent.OnClickFAB ->
+                navigator.navigate(NoteScreenDestination(null))
 
-            is HomeUiEvent.OnClickNote -> {}
+            is HomeUiEvent.OnClickNote -> {
+                val note = notes.value.first { it.id == event.noteId }
+                navigator.navigate(NoteScreenDestination(note))
+            }
 
             HomeUiEvent.DismissDialogue ->
                 _uiState.update { it.copy(dialogState = DialogState.None) }
@@ -55,6 +63,8 @@ class HomeViewModel @Inject constructor(
                     noteDao.deleteNote(event.note)
                 }
 
+            HomeUiEvent.Refresh ->
+                refresh()
         }
     }
 }

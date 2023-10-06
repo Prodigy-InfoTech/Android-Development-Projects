@@ -2,6 +2,7 @@ package com.phoenix.note.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity
 data class Note(
@@ -10,5 +11,5 @@ data class Note(
     val title: String,
     val message: String,
     val dateCreated: Long,
-    val dateUpdated: Long = System.currentTimeMillis()
-)
+    val dateUpdated: Long,
+): Serializable

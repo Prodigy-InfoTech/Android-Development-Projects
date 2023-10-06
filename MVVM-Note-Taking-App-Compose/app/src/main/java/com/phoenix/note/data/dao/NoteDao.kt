@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.phoenix.note.data.model.Note
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
@@ -15,12 +14,12 @@ interface NoteDao {
     suspend fun insertNote(note: Note): Long
 
     @Update
-    suspend fun updateNote(note: Note): Long
+    suspend fun updateNote(note: Note): Int
 
     @Delete
-    suspend fun deleteNote(note: Note): Long
+    suspend fun deleteNote(note: Note): Int
 
     @Query("SELECT * FROM note")
-    suspend fun getAllNotes(): Flow<List<Note>>
+    suspend fun getAllNotes(): List<Note>
 
 }
