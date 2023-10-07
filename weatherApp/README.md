@@ -7,13 +7,10 @@ Build a weather app that fetches weather information of a location from an API a
 <table>
 <tr>
 <td>
-  ![Image](https://github.com/samcasmmm/Android-Development-Projects/assets/87710112/8d14296c-f69d-47a2-b68c-7cc9e37fac93)
+  ![Image]([https://github.com/samcasmmm/Android-Development-Projects/assets/87710112/8d14296c-f69d-47a2-b68c-7cc9e37fac93](https://github-production-user-asset-6210df.s3.amazonaws.com/87710112/273404500-8d14296c-f69d-47a2-b68c-7cc9e37fac93.jpg))
 </td>
 <td>
-
 ![Image](https://github.com/samcasmmm/Android-Development-Projects/assets/87710112/74ed8a6a-ea76-4f86-aabd-abf8fc7782b4)
-
-  
 </td>
 </tr>
 <table>
