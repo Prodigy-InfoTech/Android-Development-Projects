@@ -22,7 +22,22 @@ It's easy to use. This app allows users to:
 * And also uses `ViewModel` to keep user data after configuration changes
 
 ## ScreenShots
-<img src="readme.files/note-app.png" alt="Screen shot">
+<table>
+<tr>
+  <td>
+    <img src="readme.files/screenshot01.jpg">
+  </td>
+  <td>
+    <img src="readme.files/screenshot02.jpg">
+  </td>
+   <td>
+    <img src="readme.files/screenshot03.jpg">
+  </td>
+   <td>
+    <img src="readme.files/screenshot04.jpg">
+  </td>
+</tr>
+</table>
 
 ## About me
 My name is Ali Bardide. You can find me on [GitHub]("https://GitHub.com/alibardide5124"), [LinkedIn]("https://linkedin.com/in/alibardide5124") or [Instagram]("https://instagram.com/alibardide.5124").
