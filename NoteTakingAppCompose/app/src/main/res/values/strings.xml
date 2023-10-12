@@ -14,4 +14,5 @@
     <string name="keep">Keep</string>
     <string name="discard">Discard</string>
     <string name="save_empty_fields">A note should at least have a title. Or maybe note itself</string>
+    <string name="discard_changes">Discard changes</string>
 </resources>

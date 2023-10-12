@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -85,7 +86,7 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        painter = painterResource(R.drawable.ic_edit),
                         contentDescription = stringResource(R.string.new_note)
                     )
                     Spacer(Modifier.width(8.dp))
@@ -147,7 +148,6 @@ fun HomeScreen(
                 homeViewModel.onEvent(HomeUiEvent.DeleteNote(note))
                 homeViewModel.onEvent(HomeUiEvent.Refresh)
             },
-            title = note.title
         )
     }
 }

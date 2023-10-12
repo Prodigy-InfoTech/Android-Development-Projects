@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -104,7 +105,7 @@ fun NoteScreen(
                 actions = {
                     note?.let {
                         Icon(
-                            imageVector = Icons.Default.Delete,
+                            painter = painterResource(R.drawable.ic_delete),
                             contentDescription = stringResource(R.string.delete),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier
@@ -143,7 +144,7 @@ fun NoteScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Check,
+                        painter = painterResource(R.drawable.ic_check_circle),
                         contentDescription = stringResource(R.string.save)
                     )
                     Spacer(Modifier.width(8.dp))
@@ -227,7 +228,6 @@ fun NoteScreen(
                 Dialog.DeleteDialog(
                     onDismiss = { noteViewModel.onEvent(NoteUiEvent.DismissDialogue) },
                     onDelete = { noteViewModel.onEvent(NoteUiEvent.DeleteNote) },
-                    title = note!!.title
                 )
             }
 
