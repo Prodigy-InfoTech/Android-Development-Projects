@@ -93,6 +93,10 @@ lib/
 3. View graphical charts for a visual representation of your expenses and income.
 4. Track expenses by categories and time periods (e.g., daily, weekly).
 
+## Screenshots
+![Home Screen](assets/Home_Screen.jpeg)
+![Options Screen](assets/Options_Screen.jpeg)
+
 ## Contributing
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
