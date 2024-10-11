@@ -94,9 +94,8 @@ lib/
 4. Track expenses by categories and time periods (e.g., daily, weekly).
 
 ## Screenshots
-<img src="assets/Home_Screen.jpeg" alt="Home Screen" width="200" height="433"/>
-<img src="assets/Options_Screen.jpeg" alt="Options Screen" width="200" height="433"/>
-
+![Home_Screen](https://github.com/user-attachments/assets/b558ec7a-2da7-422f-abc7-5a4d45bacdca)
+![Options_Screen](https://github.com/user-attachments/assets/fea2ce4f-3be6-49cd-8e33-7ee76bcb60c0)
 
 ## Contributing
 
